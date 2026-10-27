@@ -951,8 +951,12 @@
           });
 
         if (uploadError) {
-          throw uploadError;
-        }
+  throw new Error(
+    "SCREENSHOT UPLOAD FAILED: " + uploadError.message
+  );
+}
+
+console.log("Screenshot uploaded successfully:", uploadedPath);
 
         const { data, error } = await supabase.rpc(
           "submit_royal_blood_application",
