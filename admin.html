@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#100608">
+  <meta name="theme-color" content="#090608">
 
   <title>Royal Blood | Admin Dashboard</title>
 
@@ -11,172 +11,397 @@
     :root {
       --bg: #090608;
       --panel: #160b0f;
+      --panel-light: #201016;
       --red: #a30f25;
+      --red-light: #d51d3b;
       --gold: #d8b66a;
+      --gold-light: #f4df9e;
       --text: #fff5f4;
       --muted: #bcaeb1;
-      --border: rgba(216,182,106,.25);
+      --border: rgba(216,182,106,.27);
+      --green: #2b8a50;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
+      min-height: 100vh;
       background:
-        radial-gradient(ellipse at top, #46101b, transparent 45%),
+        radial-gradient(ellipse at 50% -10%, #60101f 0%, transparent 45%),
+        radial-gradient(ellipse at bottom right, #260912 0%, transparent 35%),
         var(--bg);
       color: var(--text);
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     body.modal-open {
       overflow: hidden;
     }
 
-    .container {
-      width: min(1100px, calc(100% - 24px));
-      margin: auto;
-      padding: 24px 0;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    header h1 {
-      color: var(--gold);
-      font-size: clamp(23px, 5vw, 36px);
-      overflow-wrap: anywhere;
-    }
-
-    header p,
-    .muted {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .panel,
-    .application {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-
-    .login {
-      max-width: 440px;
-      margin: 35px auto;
-    }
-
-    h2 {
-      color: var(--gold);
-      margin-top: 0;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      margin: 16px 0 8px;
-    }
-
+    button,
     input,
     select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #43232c;
-      border-radius: 8px;
-      color: white;
-      background: #0b0709;
+      font: inherit;
     }
 
     button {
       border: 0;
-      border-radius: 7px;
-      padding: 11px 14px;
-      font-weight: bold;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-weight: 800;
+      letter-spacing: .35px;
       cursor: pointer;
-      margin: 5px 4px 5px 0;
+      transition:
+        transform .2s ease,
+        filter .2s ease,
+        border-color .2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
     }
 
     button:disabled {
-      opacity: .6;
+      opacity: .55;
       cursor: wait;
+      transform: none;
     }
 
     button:focus-visible,
     input:focus-visible,
     select:focus-visible {
-      outline: 2px solid var(--gold);
+      outline: 2px solid var(--gold-light);
       outline-offset: 3px;
     }
 
-    .primary {
-      background: linear-gradient(100deg, #8d0c20, #c51b35);
+    input,
+    select {
+      width: 100%;
+      padding: 14px;
+      color: white;
+      background: #0b0709;
+      border: 1px solid #49212c;
+      border-radius: 9px;
+      min-height: 48px;
+    }
+
+    input::placeholder {
+      color: #78666c;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--gold);
+    }
+
+    select option {
+      background: #10090c;
       color: white;
     }
 
-    .secondary {
-      background: #302027;
-      color: var(--gold);
-      border: 1px solid var(--border);
-    }
-
-    .approve {
-      background: #185b35;
-      color: white;
-    }
-
-    .reject {
-      background: #771b29;
-      color: white;
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin: 19px 0 9px;
     }
 
     .hidden {
       display: none !important;
     }
 
+    .container {
+      width: min(1100px, calc(100% - 28px));
+      margin: auto;
+      padding: 25px 0 10px;
+    }
+
+    /* BRAND HEADER */
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+      padding: 18px 12px 25px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .brand-header::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 35%;
+      width: 30%;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        transparent
+      );
+    }
+
+    .logo-frame {
+      width: 112px;
+      height: 112px;
+      margin: 0 auto 17px;
+      padding: 5px;
+      border-radius: 24px;
+      border: 1px solid var(--gold);
+      background:
+        linear-gradient(145deg, #351018, #0b0709);
+      box-shadow:
+        0 0 0 5px rgba(216,182,106,.04),
+        0 0 35px rgba(163,15,37,.25);
+      overflow: hidden;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 18px;
+    }
+
+    .brand-name {
+      color: var(--gold-light);
+      font-size: clamp(25px, 5vw, 38px);
+      line-height: 1.35;
+      margin: 0;
+      overflow-wrap: anywhere;
+      text-shadow: 0 0 22px rgba(216,182,106,.15);
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      margin: 10px 0 0;
+    }
+
+    .brand-slogan {
+      color: #a78b91;
+      font-size: 12px;
+      letter-spacing: .8px;
+      margin: 12px 0 0;
+    }
+
+    /* GENERAL PANELS */
+
+    .panel,
+    .application {
+      background:
+        linear-gradient(145deg, rgba(39,15,23,.96), rgba(16,8,11,.98));
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 21px;
+      margin-bottom: 17px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.17);
+    }
+
+    h2 {
+      color: var(--gold-light);
+      margin-top: 0;
+      line-height: 1.4;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .section-kicker {
+      color: var(--red-light);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 9px;
+    }
+
+    .primary {
+      color: white;
+      background: linear-gradient(110deg, #810b20, #c51b35);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 5px 18px rgba(163,15,37,.15);
+    }
+
+    .secondary {
+      color: var(--gold-light);
+      background: #2b171e;
+      border: 1px solid var(--border);
+    }
+
+    .approve {
+      color: white;
+      background: #185b35;
+      border: 1px solid #3c9d61;
+    }
+
+    .reject {
+      color: white;
+      background: #771b29;
+      border: 1px solid #a53a4a;
+    }
+
+    /* LOGIN */
+
+    .login {
+      max-width: 440px;
+      margin: 30px auto 45px;
+      padding: 28px;
+    }
+
+    .login-brand {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .login-brand .logo-frame {
+      width: 94px;
+      height: 94px;
+      border-radius: 21px;
+    }
+
+    .login-brand h2 {
+      font-size: 23px;
+      margin: 0 0 8px;
+    }
+
+    .login-brand p {
+      margin: 0;
+      font-size: 12px;
+    }
+
+    .login-button {
+      width: 100%;
+      margin: 23px 0 0;
+      min-height: 49px;
+    }
+
+    /* NOTICES */
+
     .notice {
-      padding: 12px;
-      border-radius: 8px;
+      padding: 13px 15px;
+      border-radius: 9px;
       background: #351018;
+      border: 1px solid #792034;
       color: #ffc4cd;
       overflow-wrap: anywhere;
-      line-height: 1.6;
+      line-height: 1.7;
       margin: 14px 0;
+      font-size: 13px;
     }
 
     .success {
       background: #102b1d;
+      border-color: #286e43;
       color: #c5f4d5;
     }
 
-    .topbar {
+    /* DASHBOARD HEADER */
+
+    .dashboard-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      gap: 18px;
+      margin: 30px 0 22px;
+    }
+
+    .dashboard-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .small-logo-frame {
+      flex: 0 0 64px;
+      width: 64px;
+      height: 64px;
+      padding: 4px;
+      border-radius: 15px;
+      border: 1px solid var(--gold);
+      background: #12090c;
+      overflow: hidden;
+    }
+
+    .small-logo-frame img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .dashboard-title h2 {
+      margin: 0 0 4px;
+      font-size: clamp(18px, 4vw, 25px);
+    }
+
+    .dashboard-title .muted {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .top-actions button {
+      margin: 0;
+    }
+
+    /* FILTERS */
+
+    .filter-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, .6fr);
+      align-items: end;
+      gap: 15px;
+    }
+
+    .filter-panel label {
+      margin-top: 0;
     }
 
     .stats {
-      color: var(--gold);
-      margin: 12px 0;
+      color: var(--gold-light);
+      font-size: 13px;
+      line-height: 1.7;
+      font-weight: bold;
+      overflow-wrap: anywhere;
     }
 
-    /* Compact application cards */
+    /* APPLICATION CARDS */
 
     .application {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      gap: 17px;
       flex-wrap: wrap;
-      padding: 18px;
+      padding: 19px;
+      transition: border-color .2s ease;
+    }
+
+    .application:hover {
+      border-color: rgba(216,182,106,.55);
     }
 
     .app-summary {
@@ -186,81 +411,129 @@
     }
 
     .app-name {
-      color: var(--gold);
+      color: var(--gold-light);
       font-size: 19px;
-      font-weight: bold;
+      font-weight: 800;
       margin-bottom: 8px;
     }
 
     .app-meta {
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.8;
+      font-size: 12px;
+      line-height: 1.9;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .view-button {
+      min-width: 160px;
+      margin: 0;
     }
 
     .status {
       display: inline-block;
       padding: 6px 10px;
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 30px;
       text-transform: uppercase;
-      font-size: 11px;
-      margin: 5px 0;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin: 5px 0 9px;
     }
 
     .status-pending {
       color: #f0cf7c;
+      background: rgba(240,207,124,.07);
     }
 
     .status-approved {
       color: #9be6b5;
       border-color: #286e43;
+      background: rgba(40,110,67,.15);
     }
 
     .status-rejected {
       color: #ffabb6;
       border-color: #8d2636;
+      background: rgba(141,38,54,.15);
     }
 
-    /* Application popup */
+    .empty-state {
+      text-align: center;
+      padding: 35px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 9px;
+      font-size: 17px;
+    }
+
+    /* APPLICATION MODAL */
 
     .modal {
       position: fixed;
       inset: 0;
       z-index: 1000;
-      background: rgba(0, 0, 0, .82);
+      background: rgba(0,0,0,.86);
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 12px;
+      backdrop-filter: blur(7px);
     }
 
     .modal-content {
       position: relative;
-      width: min(760px, 100%);
+      width: min(780px, 100%);
       max-height: 92vh;
       overflow-y: auto;
+      overscroll-behavior: contain;
       background:
-        radial-gradient(ellipse at top, #351018, transparent 45%),
+        radial-gradient(ellipse at top, #42101b, transparent 45%),
         #10090c;
       border: 1px solid var(--gold);
-      border-radius: 15px;
-      padding: 22px;
-      box-shadow: 0 15px 60px rgba(0, 0, 0, .65);
+      border-radius: 17px;
+      padding: 23px;
+      box-shadow:
+        0 20px 70px rgba(0,0,0,.7),
+        0 0 30px rgba(163,15,37,.1);
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 12px;
+      gap: 14px;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
-      margin-bottom: 16px;
+      padding-bottom: 15px;
+      margin-bottom: 17px;
+    }
+
+    .modal-heading {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .modal-logo {
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      padding: 3px;
+      background: #170b10;
+      border: 1px solid var(--border);
+      border-radius: 11px;
     }
 
     .modal-header h2 {
-      margin-bottom: 6px;
+      margin: 0 0 4px;
+      font-size: 20px;
       overflow-wrap: anywhere;
     }
 
@@ -268,33 +541,36 @@
       background: #302027;
       color: white;
       border: 1px solid var(--border);
-      font-size: 20px;
-      min-width: 42px;
-      min-height: 42px;
+      font-size: 23px;
+      min-width: 43px;
+      min-height: 43px;
+      padding: 5px;
       margin: 0;
     }
 
     .details {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 12px;
     }
 
     .detail {
-      background: #0b0709;
+      background: rgba(8,5,7,.75);
       border: 1px solid #342027;
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 10px;
+      padding: 13px;
       overflow-wrap: anywhere;
-      line-height: 1.6;
+      line-height: 1.7;
       min-width: 0;
+      font-size: 13px;
     }
 
     .detail strong {
       display: block;
       color: var(--gold);
-      font-size: 12px;
-      margin-bottom: 5px;
+      font-size: 10px;
+      letter-spacing: .8px;
+      margin-bottom: 6px;
     }
 
     .detail-full {
@@ -302,27 +578,29 @@
     }
 
     .guild-name {
-      color: var(--gold);
-      font-size: 18px;
+      color: var(--gold-light);
+      font-size: 17px;
+      font-weight: bold;
     }
 
     .profile-image {
       display: block;
       max-width: 100%;
       max-height: 420px;
-      margin: 12px auto 0;
-      border-radius: 8px;
+      margin: 14px auto 0;
+      border-radius: 9px;
       border: 1px solid var(--border);
       object-fit: contain;
+      background: #080608;
     }
 
     .modal-actions {
       display: flex;
-      gap: 8px;
+      gap: 9px;
       flex-wrap: wrap;
       border-top: 1px solid var(--border);
-      margin-top: 20px;
-      padding-top: 14px;
+      margin-top: 21px;
+      padding-top: 16px;
     }
 
     .modal-actions button {
@@ -331,34 +609,91 @@
       margin: 0;
     }
 
+    /* FOOTER */
+
     footer {
       text-align: center;
-      color: #807178;
-      font-size: 12px;
-      padding: 20px;
+      color: #88747b;
+      font-size: 11px;
+      line-height: 1.9;
+      padding: 26px 12px;
+      margin-top: 20px;
+      border-top: 1px solid rgba(216,182,106,.12);
     }
 
-    @media (max-width: 480px) {
+    footer strong {
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 600px) {
       .container {
-        width: calc(100% - 16px);
-        padding-top: 16px;
+        width: calc(100% - 18px);
+        padding-top: 12px;
+      }
+
+      .brand-header {
+        padding-top: 14px;
+        margin-bottom: 20px;
+      }
+
+      .logo-frame {
+        width: 92px;
+        height: 92px;
+        border-radius: 20px;
+      }
+
+      .brand-subtitle {
+        letter-spacing: 2px;
+        font-size: 9px;
       }
 
       .panel,
-      .modal-content {
-        padding: 15px;
+      .login {
+        padding: 17px;
+      }
+
+      .dashboard-top {
+        align-items: flex-start;
+        margin-top: 22px;
+      }
+
+      .dashboard-title {
+        width: 100%;
+      }
+
+      .top-actions {
+        width: 100%;
+      }
+
+      .top-actions button {
+        flex: 1;
+      }
+
+      .filter-panel {
+        grid-template-columns: 1fr;
+        gap: 17px;
       }
 
       .application {
-        padding: 14px;
+        padding: 15px;
+        gap: 12px;
       }
 
       .app-summary {
         min-width: 100%;
       }
 
+      .view-button {
+        width: 100%;
+      }
+
       .modal-content {
-        max-height: 94vh;
+        padding: 16px;
+        max-height: 95vh;
+        border-radius: 13px;
       }
 
       .details {
@@ -368,6 +703,24 @@
       .detail-full {
         grid-column: auto;
       }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+
+      .modal-actions button {
+        width: 100%;
+        min-height: 45px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
@@ -376,24 +729,58 @@
 
 <main class="container">
 
-  <header>
-    <div style="font-size:42px">👑</div>
-    <h1>ʀᴏʏᴀʟㅤ⚜ㅤʙʟᴏᴏᴅ</h1>
-    <p>RECRUITMENT ADMINISTRATION</p>
+  <!-- ROYAL BLOOD BRANDING -->
+
+  <header class="brand-header">
+
+    <div class="logo-frame">
+      <img
+        src="logo.jpg"
+        alt="Royal Blood Logo"
+        class="brand-logo"
+      >
+    </div>
+
+    <h1 class="brand-name">ʀᴏʏᴀʟㅤ⚜ㅤʙʟᴏᴏᴅ</h1>
+
+    <p class="brand-subtitle">
+      RECRUITMENT ADMINISTRATION
+    </p>
+
+    <p class="brand-slogan">
+      BUILD YOUR NAME WITH ROYAL BLOOD
+    </p>
+
   </header>
 
   <!-- ADMIN LOGIN -->
 
   <section id="loginPanel" class="panel login">
-    <h2>Admin Login</h2>
 
-    <p class="muted">
-      Sign in with your authorized Royal Blood admin account.
-    </p>
+    <div class="login-brand">
+
+      <div class="logo-frame">
+        <img
+          src="logo.jpg"
+          alt="Royal Blood Logo"
+          class="brand-logo"
+        >
+      </div>
+
+      <div class="section-kicker">RESTRICTED ACCESS</div>
+
+      <h2>Admin Login</h2>
+
+      <p class="muted">
+        Sign in with your authorized Royal Blood administrator account.
+      </p>
+
+    </div>
 
     <form id="loginForm">
 
-      <label for="email">Admin Email</label>
+      <label for="email">ADMIN EMAIL</label>
+
       <input
         id="email"
         type="email"
@@ -402,7 +789,8 @@
         placeholder="Enter your admin email"
       >
 
-      <label for="password">Password</label>
+      <label for="password">PASSWORD</label>
+
       <input
         id="password"
         type="password"
@@ -412,12 +800,11 @@
       >
 
       <button
-        class="primary"
+        class="primary login-button"
         id="loginButton"
         type="submit"
-        style="width:100%;margin-top:18px"
       >
-        SIGN IN
+        SIGN IN TO DASHBOARD
       </button>
 
     </form>
@@ -426,61 +813,95 @@
       id="loginNotice"
       class="notice hidden"
       role="alert"
+      aria-live="polite"
     ></div>
+
   </section>
 
   <!-- ADMIN DASHBOARD -->
 
   <section id="dashboard" class="hidden">
 
-    <div class="topbar">
-      <div>
-        <h2 style="margin-bottom:5px">Application Dashboard</h2>
-        <div id="adminEmail" class="muted"></div>
+    <div class="dashboard-top">
+
+      <div class="dashboard-title">
+
+        <div class="small-logo-frame">
+          <img src="logo.jpg" alt="Royal Blood Logo">
+        </div>
+
+        <div>
+          <div class="section-kicker">ADMIN CONTROL CENTER</div>
+
+          <h2>Application Dashboard</h2>
+
+          <div id="adminEmail" class="muted"></div>
+        </div>
+
       </div>
 
-      <div>
-        <button id="refreshButton" class="secondary">
-          REFRESH
+      <div class="top-actions">
+
+        <button id="refreshButton" class="secondary" type="button">
+          ↻ REFRESH
         </button>
 
-        <button id="logoutButton" class="primary">
+        <button id="logoutButton" class="primary" type="button">
           LOG OUT
         </button>
+
       </div>
+
     </div>
 
     <div
       id="dashboardNotice"
       class="notice hidden"
       role="alert"
+      aria-live="polite"
     ></div>
 
     <div class="panel">
 
-      <label for="statusFilter">Filter Applications</label>
+      <div class="section-kicker">RECRUITMENT MANAGEMENT</div>
 
-      <select id="statusFilter">
-        <option value="all">All Applications</option>
-        <option value="pending">Pending</option>
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
-      </select>
+      <h2>Applications</h2>
 
-      <div id="applicationCount" class="stats">
-        Loading applications...
+      <div class="filter-panel">
+
+        <div>
+          <label for="statusFilter">FILTER APPLICATIONS</label>
+
+          <select id="statusFilter">
+            <option value="all">All Applications</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div
+          id="applicationCount"
+          class="stats"
+          aria-live="polite"
+        >
+          Loading applications...
+        </div>
+
       </div>
 
     </div>
-
-    <!-- Only compact application cards appear here -->
 
     <div id="applicationsList"></div>
 
   </section>
 
   <footer>
-    ROYAL BLOOD ⚜️ BUILD YOUR NAME WITH ROYAL BLOOD
+    <strong>ʀᴏʏᴀʟㅤ⚜ㅤʙʟᴏᴏᴅ</strong>
+    <br>
+    BUILD YOUR NAME WITH ROYAL BLOOD
+    <br>
+    Recruitment Administration
   </footer>
 
 </main>
@@ -498,9 +919,22 @@
 
     <div class="modal-header">
 
-      <div>
-        <h2 id="modalTitle">Application Details</h2>
-        <div id="modalStatus" class="status">PENDING</div>
+      <div class="modal-heading">
+
+        <img
+          src="logo.jpg"
+          alt=""
+          class="modal-logo"
+        >
+
+        <div>
+          <h2 id="modalTitle">Application Details</h2>
+
+          <div id="modalStatus" class="status status-pending">
+            PENDING
+          </div>
+        </div>
+
       </div>
 
       <button
@@ -514,7 +948,12 @@
 
     </div>
 
-    <div id="modalNotice" class="notice hidden" role="alert"></div>
+    <div
+      id="modalNotice"
+      class="notice hidden"
+      role="alert"
+      aria-live="polite"
+    ></div>
 
     <div id="modalDetails" class="details"></div>
 
@@ -528,9 +967,8 @@
   import { createClient } from
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // IMPORTANT:
-  // Use the same project URL and publishable key as index.html.
-  // Never put a service-role or secret key in this file.
+  // Use the existing project URL and publishable key.
+  // Never place a service-role or secret key in browser code.
 
   const SUPABASE_URL =
     "https://hawpgtlerdlbxhiappxy.supabase.co";
@@ -692,7 +1130,7 @@
   }
 
   // ------------------------------
-  // RENDER COMPACT APPLICATION CARDS
+  // RENDER APPLICATION CARDS
   // ------------------------------
 
   function renderApplications() {
@@ -708,14 +1146,21 @@
     });
 
     document.getElementById("applicationCount").textContent =
-      `Total: ${allApplications.length} | Showing: ${filtered.length}`;
+      `TOTAL: ${allApplications.length}  |  SHOWING: ${filtered.length}`;
 
     if (!filtered.length) {
       const empty = document.createElement("div");
 
-      empty.className = "panel";
-      empty.textContent =
-        "No applications found for this filter.";
+      empty.className = "panel empty-state";
+
+      const heading = document.createElement("strong");
+      heading.textContent = "No Applications Found";
+
+      const message = document.createElement("div");
+      message.textContent =
+        "There are no applications matching this filter.";
+
+      empty.append(heading, message);
 
       applicationsList.appendChild(empty);
 
@@ -725,22 +1170,17 @@
     for (const app of filtered) {
 
       const card = document.createElement("article");
-
       card.className = "application";
 
       const summary = document.createElement("div");
-
       summary.className = "app-summary";
 
       const name = document.createElement("div");
-
       name.className = "app-name";
-
       name.textContent =
         app.current_free_fire_name || "Unnamed Applicant";
 
       const status = document.createElement("span");
-
       status.className =
         "status " + getStatusClass(app.status);
 
@@ -748,21 +1188,18 @@
         normalizedStatus(app.status).toUpperCase();
 
       const meta = document.createElement("div");
-
       meta.className = "app-meta";
 
       meta.textContent =
         `UID: ${app.free_fire_uid || "Not provided"}\n` +
-        `Submitted: ${formatDate(app.created_at)}`;
-
-      meta.style.whiteSpace = "pre-line";
+        `SUBMITTED: ${formatDate(app.created_at)}`;
 
       summary.append(name, status, meta);
 
       const viewButton = document.createElement("button");
 
       viewButton.type = "button";
-      viewButton.className = "primary";
+      viewButton.className = "primary view-button";
       viewButton.textContent = "VIEW APPLICATION";
 
       viewButton.addEventListener("click", () => {
@@ -776,7 +1213,7 @@
   }
 
   // ------------------------------
-  // OPEN FULL APPLICATION POPUP
+  // OPEN APPLICATION POPUP
   // ------------------------------
 
   async function openApplication(id) {
@@ -813,8 +1250,6 @@
 
     modalStatus.className =
       "status " + getStatusClass(app.status);
-
-    // Full applicant information
 
     addDetail(
       modalDetails,
@@ -878,32 +1313,26 @@
       "detail-full"
     );
 
-    // Screenshot placeholder
+    // Screenshot area
 
     const screenshotBox = document.createElement("div");
-
     screenshotBox.className = "detail detail-full";
 
     const screenshotTitle = document.createElement("strong");
-
-    screenshotTitle.textContent =
-      "FREE FIRE PROFILE SCREENSHOT";
+    screenshotTitle.textContent = "FREE FIRE PROFILE SCREENSHOT";
 
     const screenshotMessage = document.createElement("p");
-
     screenshotMessage.className = "muted";
-    screenshotMessage.textContent = app.profile_screenshot_path
-      ? "Loading screenshot..."
-      : "No screenshot was attached to this application.";
 
-    screenshotBox.append(
-      screenshotTitle,
-      screenshotMessage
-    );
+    screenshotMessage.textContent =
+      app.profile_screenshot_path
+        ? "Loading screenshot..."
+        : "No screenshot was attached to this application.";
 
+    screenshotBox.append(screenshotTitle, screenshotMessage);
     modalDetails.appendChild(screenshotBox);
 
-    // Show status action buttons
+    // Status controls
 
     if (normalizedStatus(app.status) !== "approved") {
       addButton(
@@ -939,10 +1368,7 @@
       closeApplication
     );
 
-    // Open the popup before loading the screenshot
-
     applicationModal.classList.remove("hidden");
-
     document.body.classList.add("modal-open");
 
     document.getElementById("closeModalButton").focus();
@@ -951,14 +1377,14 @@
       return;
     }
 
-    // Use a short-lived signed URL for the private screenshot
+    // Create a temporary signed URL for the private screenshot.
 
     const { data, error } = await supabase
       .storage
       .from("profile-screenshots")
       .createSignedUrl(app.profile_screenshot_path, 300);
 
-    // Ignore a late response if another application was opened
+    // Ignore delayed responses for another application or a closed popup.
 
     if (
       String(selectedApplicationId) !== String(app.id) ||
@@ -996,7 +1422,6 @@
     image.src = data.signedUrl;
 
     screenshotMessage.textContent = "";
-
     screenshotBox.appendChild(image);
   }
 
@@ -1006,7 +1431,6 @@
 
   function closeApplication() {
     applicationModal.classList.add("hidden");
-
     document.body.classList.remove("modal-open");
 
     selectedApplicationId = null;
@@ -1022,15 +1446,11 @@
   document.getElementById("closeModalButton")
     .addEventListener("click", closeApplication);
 
-  // Close by tapping the dark area outside the popup
-
   applicationModal.addEventListener("click", event => {
     if (event.target === applicationModal) {
       closeApplication();
     }
   });
-
-  // Close with the Escape key
 
   document.addEventListener("keydown", event => {
     if (
@@ -1096,8 +1516,6 @@
 
       return;
     }
-
-    // Reload data so the card and status remain synchronized
 
     await loadApplications();
 
@@ -1189,7 +1607,7 @@
       } finally {
 
         loginButton.disabled = false;
-        loginButton.textContent = "SIGN IN";
+        loginButton.textContent = "SIGN IN TO DASHBOARD";
 
       }
 
