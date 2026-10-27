@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100608">
+  <title>Royal Blood | Admin Dashboard</title>
+
+  <style>
+    :root {
+      --bg: #090608;
+      --panel: #160b0f;
+      --red: #a30f25;
+      --gold: #d8b66a;
+      --text: #fff5f4;
+      --muted: #bcaeb1;
+      --border: rgba(216,182,106,.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at top, #46101b, transparent 45%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 24px));
+      margin: auto;
+      padding: 28px 0;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      color: var(--gold);
+      font-size: clamp(23px, 5vw, 36px);
+      overflow-wrap: anywhere;
+    }
+
+    header p, .muted {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .panel, .application {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .login {
+      max-width: 440px;
+      margin: 35px auto;
+    }
+
+    h2 {
+      color: var(--gold);
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin: 16px 0 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #43232c;
+      border-radius: 8px;
+      color: white;
+      background: #0b0709;
+    }
+
+    button {
+      border: 0;
+      border-radius: 7px;
+      padding: 11px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 5px 4px 5px 0;
+    }
+
+    .primary {
+      background: linear-gradient(100deg, #8d0c20, #c51b35);
+      color: white;
+    }
+
+    .secondary {
+      background: #302027;
+      color: var(--gold);
+      border: 1px solid var(--border);
+    }
+
+    .approve {
+      background: #185b35;
+      color: white;
+    }
+
+    .reject {
+      background: #771b29;
+      color: white;
+    }
+
+    .hidden { display: none !important; }
+
+    .notice {
+      padding: 12px;
+      border-radius: 8px;
+      background: #351018;
+      color: #ffc4cd;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+      margin: 14px 0;
+    }
+
+    .success {
+      background: #102b1d;
+      color: #c5f4d5;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      color: var(--gold);
+      margin: 12px 0 20px;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .detail {
+      background: #0b0709;
+      border: 1px solid #342027;
+      border-radius: 8px;
+      padding: 12px;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+    }
+
+    .detail strong {
+      display: block;
+      color: var(--gold);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .guild-name {
+      font-size: 19px;
+      color: var(--gold);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-transform: uppercase;
+      font-size: 11px;
+      margin-bottom: 12px;
+    }
+
+    .profile-image {
+      display: block;
+      max-width: 100%;
+      max-height: 420px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .actions {
+      margin-top: 18px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .muted { font-size: 13px; }
+
+    footer {
+      text-align: center;
+      color: #807178;
+      font-size: 12px;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+<main class="container">
+
+  <header>
+    <div style="font-size:42px">👑</div>
+    <h1>ʀᴏʏᴀʟㅤ⚜ㅤʙʟᴏᴏᴅ</h1>
+    <p>RECRUITMENT ADMINISTRATION</p>
+  </header>
+
+  <section id="loginPanel" class="panel login">
+    <h2>Admin Login</h2>
+    <p class="muted">Sign in with your authorized Royal Blood admin account.</p>
+
+    <form id="loginForm">
+      <label for="email">Admin Email</label>
+      <input id="email" type="email" autocomplete="username"
+             required placeholder="Enter your admin email">
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+             autocomplete="current-password" required
+             placeholder="Enter your password">
+
+      <button class="primary" id="loginButton" type="submit"
+              style="width:100%;margin-top:18px">
+        SIGN IN
+      </button>
+    </form>
+
+    <div id="loginNotice" class="notice hidden" role="alert"></div>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="topbar">
+      <div>
+        <h2 style="margin-bottom:5px">Application Dashboard</h2>
+        <div id="adminEmail" class="muted"></div>
+      </div>
+      <div>
+        <button id="refreshButton" class="secondary">REFRESH</button>
+        <button id="logoutButton" class="primary">LOG OUT</button>
+      </div>
+    </div>
+
+    <div id="dashboardNotice" class="notice hidden" role="alert"></div>
+
+    <div class="panel">
+      <label for="statusFilter">Filter Applications</label>
+      <select id="statusFilter">
+        <option value="all">All Applications</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
+      <div id="applicationCount" class="stats">Loading applications...</div>
+    </div>
+
+    <div id="applicationsList"></div>
+  </section>
+
+  <footer>
+    ROYAL BLOOD ⚜️ BUILD YOUR NAME WITH ROYAL BLOOD
+  </footer>
+</main>
+
+<script type="module">
+  import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  // Use the same project URL and publishable key as index.html.
+  const SUPABASE_URL = "https://hawpgtlerdlbxhiappxy.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_vAz2B0_INpPwM1GalC8YHA_wLyASGNl";
+;
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  const loginPanel = document.getElementById("loginPanel");
+  const dashboard = document.getElementById("dashboard");
+  const loginNotice = document.getElementById("loginNotice");
+  const dashboardNotice = document.getElementById("dashboardNotice");
+  const applicationsList = document.getElementById("applicationsList");
+
+  let allApplications = [];
+
+  function showMessage(element, message, success = false) {
+    element.textContent = message;
+    element.className = "notice" + (success ? " success" : "");
+  }
+
+  function clearMessage(element) {
+    element.textContent = "";
+    element.className = "notice hidden";
+  }
+
+  function addDetail(parent, label, value) {
+    const box = document.createElement("div");
+    box.className = "detail";
+
+    const title = document.createElement("strong");
+    title.textContent = label;
+
+    const content = document.createElement("div");
+    content.textContent =
+      value === null || value === undefined || value === ""
+        ? "Not provided"
+        : String(value);
+
+    box.append(title, content);
+    parent.appendChild(box);
+    return box;
+  }
+
+  function addButton(parent, text, className, handler) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = className;
+    button.textContent = text;
+    button.addEventListener("click", handler);
+    parent.appendChild(button);
+    return button;
+  }
+
+  async function showProfileImage(container, path) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "detail";
+
+    const title = document.createElement("strong");
+    title.textContent = "FREE FIRE PROFILE SCREENSHOT";
+    wrapper.appendChild(title);
+
+    const image = document.createElement("img");
+    image.className = "profile-image";
+    image.alt = "Applicant's Free Fire profile screenshot";
+    image.loading = "lazy";
+
+    wrapper.appendChild(image);
+    container.appendChild(wrapper);
+
+    const { data, error } = await supabase
+      .storage
+      .from("profile-screenshots")
+      .createSignedUrl(path, 300);
+
+    if (error) {
+      image.remove();
+      const message = document.createElement("p");
+      message.className = "muted";
+      message.textContent =
+        "Screenshot unavailable. Check the admin Storage permissions.";
+      wrapper.appendChild(message);
+      return;
+    }
+
+    image.src = data.signedUrl;
+  }
+
+  async function loadApplications() {
+    clearMessage(dashboardNotice);
+    applicationsList.replaceChildren();
+
+    const count = document.getElementById("applicationCount");
+    count.textContent = "Loading applications...";
+
+    const { data, error } = await supabase
+      .from("applications")
+      .select(
+        "id,current_free_fire_name,free_fire_uid,gender,free_fire_level,desired_name,generated_guild_name,profile_screenshot_path,whatsapp_number,application_reason,status,created_at"
+      )
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      count.textContent = "";
+      showMessage(
+        dashboardNotice,
+        "Could not load applications. Check your admin account, table permissions and RLS policies."
+      );
+      console.error(error);
+      return;
+    }
+
+    allApplications = data || [];
+    renderApplications();
+  }
+
+  function renderApplications() {
+    applicationsList.replaceChildren();
+
+    const filter = document.getElementById("statusFilter").value;
+
+    const filtered = allApplications.filter(app =>
+      filter === "all" || app.status === filter
+    );
+
+    document.getElementById("applicationCount").textContent =
+      `Total: ${allApplications.length} | Showing: ${filtered.length}`;
+
+    if (!filtered.length) {
+      const empty = document.createElement("div");
+      empty.className = "panel";
+      empty.textContent = "No applications found for this filter.";
+      applicationsList.appendChild(empty);
+      return;
+    }
+
+    for (const app of filtered) {
+      const card = document.createElement("article");
+      card.className = "application";
+
+      const heading = document.createElement("h2");
+      heading.textContent = app.current_free_fire_name || "Unnamed Applicant";
+      card.appendChild(heading);
+
+      const status = document.createElement("span");
+      status.className = "status";
+      status.textContent = app.status || "pending";
+      card.appendChild(status);
+
+      const details = document.createElement("div");
+      details.className = "details";
+
+      addDetail(details, "FREE FIRE UID", app.free_fire_uid);
+      addDetail(details, "GENDER", app.gender);
+      addDetail(details, "FREE FIRE LEVEL", app.free_fire_level);
+      addDetail(details, "DESIRED NAME", app.desired_name);
+      addDetail(details, "WHATSAPP", app.whatsapp_number);
+      addDetail(details, "SUBMITTED", app.created_at
+        ? new Date(app.created_at).toLocaleString()
+        : "Unknown");
+
+      const guild = addDetail(
+        details,
+        "GENERATED ROYAL BLOOD NAME",
+        app.generated_guild_name
+      );
+      guild.classList.add("guild-name");
+
+      addDetail(details, "REASON FOR JOINING", app.application_reason);
+
+      card.appendChild(details);
+      applicationsList.appendChild(card);
+
+      if (app.profile_screenshot_path) {
+        showProfileImage(card, app.profile_screenshot_path);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      if (app.status !== "approved") {
+        addButton(actions, "APPROVE", "approve", () =>
+          updateStatus(app.id, "approved")
+        );
+      }
+
+      if (app.status !== "rejected") {
+        addButton(actions, "REJECT", "reject", () =>
+          updateStatus(app.id, "rejected")
+        );
+      }
+
+      if (app.status !== "pending") {
+        addButton(actions, "RESET TO PENDING", "secondary", () =>
+          updateStatus(app.id, "pending")
+        );
+      }
+
+      card.appendChild(actions);
+    }
+  }
+
+  async function updateStatus(id, status) {
+    const confirmed = confirm(
+      `Change this application's status to ${status.toUpperCase()}?`
+    );
+
+    if (!confirmed) return;
+
+    clearMessage(dashboardNotice);
+
+    const { data, error } = await supabase
+      .from("applications")
+      .update({ status })
+      .eq("id", id)
+      .select("id");
+
+    if (error) {
+      showMessage(
+        dashboardNotice,
+        "Status update failed. Check admin UPDATE permissions and RLS policies."
+      );
+      console.error(error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      showMessage(
+        dashboardNotice,
+        "No application was updated. Your account may not have admin permission."
+      );
+      return;
+    }
+
+    showMessage(
+      dashboardNotice,
+      `Application status updated to ${status.toUpperCase()}.`,
+      true
+    );
+
+    await loadApplications();
+  }
+
+  async function enterDashboard(user) {
+    // The database function verifies the signed-in user's admin status.
+    const { data, error } = await supabase.rpc("is_royal_blood_admin");
+
+    if (error || data !== true) {
+      await supabase.auth.signOut();
+      loginPanel.classList.remove("hidden");
+      dashboard.classList.add("hidden");
+
+      showMessage(
+        loginNotice,
+        "Access denied. This account is not registered as a Royal Blood administrator."
+      );
+      return;
+    }
+
+    clearMessage(loginNotice);
+    loginPanel.classList.add("hidden");
+    dashboard.classList.remove("hidden");
+
+    document.getElementById("adminEmail").textContent =
+      "Signed in: " + (user.email || "Admin");
+
+    await loadApplications();
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    clearMessage(loginNotice);
+
+    const loginButton = document.getElementById("loginButton");
+    loginButton.disabled = true;
+    loginButton.textContent = "SIGNING IN...";
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value
+      });
+
+      if (error) throw error;
+
+      await enterDashboard(data.user);
+    } catch (error) {
+      console.error(error);
+      showMessage(
+        loginNotice,
+        "Login failed. Check your email and password, then try again."
+      );
+    } finally {
+      loginButton.disabled = false;
+      loginButton.textContent = "SIGN IN";
+    }
+  });
+
+  document.getElementById("refreshButton").addEventListener(
+    "click", loadApplications
+  );
+
+  document.getElementById("statusFilter").addEventListener(
+    "change", renderApplications
+  );
+
+  document.getElementById("logoutButton").addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    allApplications = [];
+    applicationsList.replaceChildren();
+    dashboard.classList.add("hidden");
+    loginPanel.classList.remove("hidden");
+    document.getElementById("password").value = "";
+    clearMessage(loginNotice);
+  });
+
+  // Restore a previous session only after checking admin authorization.
+  const { data: sessionData } = await supabase.auth.getSession();
+
+  if (sessionData.session) {
+    await enterDashboard(sessionData.session.user);
+  }
+</script>
+</body>
+        </html>
