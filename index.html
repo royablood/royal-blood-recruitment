@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#100608">
+  <meta name="description" content="Apply to join Royal Blood, a Free Fire guild recruiting dedicated players.">
+  <title>Royal Blood | Recruitment</title>
+
+  <style>
+    :root {
+      --bg: #090608;
+      --panel: #150b0e;
+      --red: #a30f25;
+      --red-light: #ed2946;
+      --gold: #d8b66a;
+      --text: #fff5f4;
+      --muted: #bcaeb1;
+      --border: rgba(216, 182, 106, .24);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% 0%, #46101b 0%, transparent 48%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(100% - 30px, 760px);
+      margin: auto;
+      padding: 35px 0;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .crown {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .brand h1 {
+      color: var(--gold);
+      font-size: clamp(25px, 6vw, 42px);
+      letter-spacing: 2px;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .brand p {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-top: 12px;
+    }
+
+    .slogan {
+      color: var(--gold) !important;
+      font-size: 11px !important;
+      letter-spacing: 2px !important;
+      line-height: 1.7;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, rgba(35, 13, 19, .97), rgba(15, 9, 12, .98));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: clamp(20px, 5vw, 36px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, .35);
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 23px;
+      margin: 0 0 10px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .gender-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .gender-btn {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 25px 10px;
+      color: var(--text);
+      background: #1b0c11;
+      transition: .2s;
+    }
+
+    .gender-btn:hover {
+      border-color: var(--gold);
+      background: #301018;
+      transform: translateY(-2px);
+    }
+
+    .gender-icon {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .gender-btn strong {
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .field {
+      margin-bottom: 19px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 13px 14px;
+      color: var(--text);
+      background: #0b0709;
+      border: 1px solid #43232c;
+      border-radius: 9px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #84747a;
+    }
+
+    input[type="file"] {
+      font-size: 12px;
+      padding: 12px;
+    }
+
+    input[type="file"]::file-selector-button {
+      background: #39111c;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 8px;
+      border-radius: 6px;
+      margin-right: 10px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .help {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .selected-gender {
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 22px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--gold);
+      background: rgba(163, 15, 37, .1);
+    }
+
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 9px;
+      padding: 15px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(100deg, #8d0c20, #c51b35);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.15);
+    }
+
+    .btn-secondary {
+      margin-top: 12px;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      background: transparent;
+    }
+
+    .notice {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .notice.error {
+      display: block;
+      background: #351018;
+      border: 1px solid #9f293d;
+      color: #ffc4cd;
+    }
+
+    .notice.success {
+      display: block;
+      background: #102b1d;
+      border: 1px solid #34784e;
+      color: #c5f4d5;
+    }
+
+    .guild-name {
+      padding: 18px 10px;
+      border: 1px dashed var(--gold);
+      background: #0b0709;
+      color: var(--gold);
+      text-align: center;
+      border-radius: 10px;
+      font-size: clamp(17px, 4vw, 24px);
+      overflow-wrap: anywhere;
+      margin: 22px 0;
+      user-select: text;
+    }
+
+    .small-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto 0;
+      border: 0;
+      background: none;
+      color: var(--gold);
+      text-decoration: underline;
+      padding: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    footer {
+      text-align: center;
+      color: #807178;
+      font-size: 11px;
+      line-height: 1.8;
+      padding: 25px 5px 0;
+    }
+
+    @media (max-width: 400px) {
+      .gender-options {
+        gap: 9px;
+      }
+
+      .gender-btn {
+        padding: 20px 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="brand">
+      <div class="crown">👑</div>
+      <h1>ʀᴏʏᴀʟㅤ⚜ㅤʙʟᴏᴏᴅ</h1>
+      <p>OFFICIAL RECRUITMENT</p>
+      <p class="slogan">BUILD YOUR NAME WITH ROYAL BLOOD</p>
+    </header>
+
+    <!-- GENDER SELECTION -->
+    <section id="welcome" class="panel">
+      <h2>ENTER THE ROYAL GATES</h2>
+      <p class="subtitle">
+        Ready to become part of Royal Blood?<br>
+        Select your guild name style to begin your application.
+      </p>
+
+      <div class="gender-options">
+        <button class="gender-btn" type="button" data-gender="male">
+          <span class="gender-icon">⚜️</span>
+          <strong>MALE</strong>
+        </button>
+
+        <button class="gender-btn" type="button" data-gender="female">
+          <span class="gender-icon">🌸</span>
+          <strong>FEMALE</strong>
+        </button>
+      </div>
+
+      <p class="small-note" style="margin-top:24px">
+        Choose the style you want for your Royal Blood guild name.
+      </p>
+    </section>
+
+    <!-- APPLICATION FORM -->
+    <section id="applicationPanel" class="panel hidden">
+      <h2>GUILD APPLICATION</h2>
+      <p class="subtitle">Complete every field carefully before submitting.</p>
+
+      <div id="selectedGender" class="selected-gender"></div>
+      <div id="formNotice" class="notice" role="alert"></div>
+
+      <form id="applicationForm">
+        <div class="field">
+          <label for="currentName">Current Free Fire Name *</label>
+          <input id="currentName" name="currentName" maxlength="50"
+                 required placeholder="Enter your current in-game name">
+        </div>
+
+        <div class="field">
+          <label for="uid">Free Fire UID *</label>
+          <input id="uid" name="uid" maxlength="30"
+                 required placeholder="Enter your Free Fire UID">
+        </div>
+
+        <div class="field">
+          <label for="level">Free Fire Level *</label>
+          <input id="level" name="level" type="number"
+                 min="1" max="999" required placeholder="Enter your level">
+        </div>
+
+        <div class="field">
+          <label for="desiredName">Name You Want to Use in Royal Blood *</label>
+          <input id="desiredName" name="desiredName" maxlength="30"
+                 required placeholder="Example: Spencer">
+          <small class="help">
+            Letters and numbers only will be used to create your guild name.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="screenshot">Free Fire Profile Screenshot *</label>
+          <input id="screenshot" name="screenshot" type="file"
+                 accept="image/jpeg,image/png,image/webp" required>
+          <small class="help">
+            Upload a clear screenshot of your in-game profile.
+            Accepted formats: JPG, PNG and WEBP. Maximum size: 5 MB.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="whatsapp">WhatsApp Contact Number *</label>
+          <input id="whatsapp" name="whatsapp" type="tel"
+                 minlength="7" maxlength="25" required
+                 placeholder="Include your country code, e.g. +234...">
+          <small class="help">
+            We will use this number to contact you about your application.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="reason">Why Do You Want to Join Royal Blood? *</label>
+          <textarea id="reason" name="reason" minlength="5" maxlength="1000"
+                    required placeholder="Tell us why you want to join..."></textarea>
+        </div>
+
+        <button id="submitBtn" class="btn btn-primary" type="submit">
+          SUBMIT APPLICATION ⚜️
+        </button>
+
+        <button id="changeGenderBtn" class="btn btn-secondary" type="button">
+          CHANGE GENDER
+        </button>
+      </form>
+    </section>
+
+    <!-- SUBMISSION CONFIRMATION -->
+    <section id="confirmation" class="panel hidden">
+      <h2>⚜️ APPLICATION SUBMITTED</h2>
+
+      <p class="subtitle">
+        Your Royal Blood application has been received successfully.
+      </p>
+
+      <p class="small-note">YOUR GENERATED GUILD NAME</p>
+      <div id="generatedName" class="guild-name"></div>
+
+      <button id="copyNameBtn" class="btn btn-primary" type="button">
+        COPY GUILD NAME
+      </button>
+
+      <p class="small-note" style="margin-top:25px">
+        Your application is now awaiting review. Submission does not mean
+        you have been accepted into Royal Blood. If your application is
+        approved, the guild administration will contact you through the
+        WhatsApp number you provided.
+      </p>
+
+      <button id="newApplicationBtn" class="back-btn" type="button">
+        Return to the beginning
+      </button>
+    </section>
+
+    <footer>
+      <div>ʀᴏʏᴀʟㅤ⚜ㅤʙʟᴏᴏᴅ</div>
+      <div>Official Free Fire Guild Recruitment</div>
+      <div>Recruitment applications are reviewed by the guild administration.</div>
+    </footer>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    // Replace BOTH values with your Supabase project details.
+    const SUPABASE_URL = "https://hawpgtlerdlbxhiappxy.supabase.co/rest/v1/";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vAz2B0_INpPwM1GalC8YHA_wLyASGNl";
+
+    const welcome = document.getElementById("welcome");
+    const applicationPanel = document.getElementById("applicationPanel");
+    const confirmation = document.getElementById("confirmation");
+    const form = document.getElementById("applicationForm");
+    const notice = document.getElementById("formNotice");
+    const submitBtn = document.getElementById("submitBtn");
+
+    let selectedGender = null;
+    let supabase = null;
+
+    const configurationReady =
+      SUPABASE_URL.startsWith("https://") &&
+      !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+      SUPABASE_PUBLISHABLE_KEY.length > 20 &&
+      !SUPABASE_PUBLISHABLE_KEY.includes("YOUR_SUPABASE");
+
+    if (configurationReady) {
+      supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    }
+
+    function showNotice(message, type = "error") {
+      notice.textContent = message;
+      notice.className = "notice " + type;
+      notice.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function hideNotice() {
+      notice.textContent = "";
+      notice.className = "notice";
+    }
+
+    function showApplication(gender) {
+      selectedGender = gender;
+      welcome.classList.add("hidden");
+      confirmation.classList.add("hidden");
+      applicationPanel.classList.remove("hidden");
+
+      document.getElementById("selectedGender").textContent =
+        "Selected name style: " +
+        (gender === "male" ? "MALE ⚜️" : "FEMALE 🌸");
+
+      hideNotice();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("[data-gender]").forEach(button => {
+      button.addEventListener("click", () => {
+        showApplication(button.dataset.gender);
+      });
+    });
+
+    document.getElementById("changeGenderBtn").addEventListener("click", () => {
+      applicationPanel.classList.add("hidden");
+      welcome.classList.remove("hidden");
+      hideNotice();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    function makeUuid() {
+      if (crypto.randomUUID) return crypto.randomUUID();
+
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        return (c === "x" ? r : (r & 3 | 8)).toString(16);
+      });
+    }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      hideNotice();
+
+      if (!supabase) {
+        showNotice(
+          "The website has not been connected to Supabase yet. " +
+          "Please check the Project URL and Publishable Key in the code."
+        );
+        return;
+      }
+
+      if (!selectedGender) {
+        showNotice("Please select your gender first.");
+        return;
+      }
+
+      const file = document.getElementById("screenshot").files[0];
+
+      if (!file) {
+        showNotice("Please upload your Free Fire profile screenshot.");
+        return;
+      }
+
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+      if (!allowedTypes.includes(file.type)) {
+        showNotice("Please upload a JPG, PNG or WEBP image.");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showNotice("Your screenshot must be 5 MB or smaller.");
+        return;
+      }
+
+      const desiredName = document.getElementById("desiredName").value.trim();
+
+      if (!/^[a-zA-Z0-9]{1,30}$/.test(desiredName)) {
+        showNotice("Your desired guild name must contain only letters and numbers.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "SUBMITTING APPLICATION...";
+
+      let uploadedPath = null;
+
+      try {
+        const extensionMap = {
+          "image/jpeg": "jpg",
+          "image/png": "png",
+          "image/webp": "webp"
+        };
+
+        // The path format must match the storage policy configured in Supabase.
+        const folderId = makeUuid();
+        const extension = extensionMap[file.type];
+        uploadedPath = `${folderId}/profile.${extension}`;
+
+        const { error: uploadError } = await supabase
+          .storage
+          .from("profile-screenshots")
+          .upload(uploadedPath, file, {
+            contentType: file.type,
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data, error } = await supabase.rpc(
+          "submit_royal_blood_application",
+          {
+            p_current_name: document.getElementById("currentName").value.trim(),
+            p_uid: document.getElementById("uid").value.trim(),
+            p_gender: selectedGender,
+            p_level: Number(document.getElementById("level").value),
+            p_desired_name: desiredName,
+            p_screenshot_path: uploadedPath,
+            p_whatsapp: document.getElementById("whatsapp").value.trim(),
+            p_reason: document.getElementById("reason").value.trim()
+          }
+        );
+
+        if (error) throw error;
+
+        const result = Array.isArray(data) ? data[0] : data;
+
+        if (!result || !result.generated_name) {
+          throw new Error("The application was submitted, but the generated name was not returned. Contact the guild administrator before submitting again.");
+        }
+
+        document.getElementById("generatedName").textContent =
+          result.generated_name;
+
+        applicationPanel.classList.add("hidden");
+        confirmation.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+      } catch (error) {
+        console.error("Application submission error:", error);
+
+        let message =
+          "We could not submit your application. Please check your connection and try again.";
+
+        if (error.message && error.message.includes("row-level security")) {
+          message =
+            "Screenshot upload was blocked by the storage permissions. " +
+            "Please contact the guild administrator.";
+        } else if (error.message && error.message.includes("Invalid")) {
+          message = error.message;
+        } else if (error.message && error.message.includes("Please check")) {
+          message = error.message;
+        } else if (error.message && error.message.includes("valid desired name")) {
+          message = error.message;
+        } else if (error.message && error.message.includes("Failed to fetch")) {
+          message =
+            "Could not connect to Supabase. Please check the Project URL, " +
+            "Publishable Key and internet connection.";
+        }
+
+        showNotice(message);
+
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "SUBMIT APPLICATION ⚜️";
+      }
+    });
+
+    document.getElementById("copyNameBtn").addEventListener("click", async () => {
+      const name = document.getElementById("generatedName").textContent;
+
+      try {
+        await navigator.clipboard.writeText(name);
+        document.getElementById("copyNameBtn").textContent = "COPIED ✓";
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(document.getElementById("generatedName"));
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.getElementById("copyNameBtn").textContent =
+          "SELECTED — COPY THE NAME";
+      }
+    });
+
+    document.getElementById("newApplicationBtn").addEventListener("click", () => {
+      form.reset();
+      selectedGender = null;
+
+      confirmation.classList.add("hidden");
+      applicationPanel.classList.add("hidden");
+      welcome.classList.remove("hidden");
+
+      document.getElementById("copyNameBtn").textContent = "COPY GUILD NAME";
+      hideNotice();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
