@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#100608">
+
   <title>Royal Blood | Admin Dashboard</title>
 
   <style>
@@ -17,7 +18,9 @@
       --border: rgba(216,182,106,.25);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -28,10 +31,14 @@
       font-family: Arial, sans-serif;
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     .container {
       width: min(1100px, calc(100% - 24px));
       margin: auto;
-      padding: 28px 0;
+      padding: 24px 0;
     }
 
     header {
@@ -45,17 +52,19 @@
       overflow-wrap: anywhere;
     }
 
-    header p, .muted {
+    header p,
+    .muted {
       color: var(--muted);
       line-height: 1.7;
     }
 
-    .panel, .application {
+    .panel,
+    .application {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
     }
 
     .login {
@@ -74,7 +83,8 @@
       margin: 16px 0 8px;
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
       padding: 13px;
       border: 1px solid #43232c;
@@ -90,6 +100,18 @@
       font-weight: bold;
       cursor: pointer;
       margin: 5px 4px 5px 0;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
     }
 
     .primary {
@@ -113,7 +135,9 @@
       color: white;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
     .notice {
       padding: 12px;
@@ -141,12 +165,118 @@
 
     .stats {
       color: var(--gold);
-      margin: 12px 0 20px;
+      margin: 12px 0;
+    }
+
+    /* Compact application cards */
+
+    .application {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px;
+    }
+
+    .app-summary {
+      flex: 1;
+      min-width: 180px;
+      overflow-wrap: anywhere;
+    }
+
+    .app-name {
+      color: var(--gold);
+      font-size: 19px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .app-meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-transform: uppercase;
+      font-size: 11px;
+      margin: 5px 0;
+    }
+
+    .status-pending {
+      color: #f0cf7c;
+    }
+
+    .status-approved {
+      color: #9be6b5;
+      border-color: #286e43;
+    }
+
+    .status-rejected {
+      color: #ffabb6;
+      border-color: #8d2636;
+    }
+
+    /* Application popup */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, .82);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+    }
+
+    .modal-content {
+      position: relative;
+      width: min(760px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background:
+        radial-gradient(ellipse at top, #351018, transparent 45%),
+        #10090c;
+      border: 1px solid var(--gold);
+      border-radius: 15px;
+      padding: 22px;
+      box-shadow: 0 15px 60px rgba(0, 0, 0, .65);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      margin-bottom: 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .close-button {
+      background: #302027;
+      color: white;
+      border: 1px solid var(--border);
+      font-size: 20px;
+      min-width: 42px;
+      min-height: 42px;
+      margin: 0;
     }
 
     .details {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 12px;
     }
 
@@ -157,6 +287,7 @@
       padding: 12px;
       overflow-wrap: anywhere;
       line-height: 1.6;
+      min-width: 0;
     }
 
     .detail strong {
@@ -166,37 +297,39 @@
       margin-bottom: 5px;
     }
 
-    .guild-name {
-      font-size: 19px;
-      color: var(--gold);
+    .detail-full {
+      grid-column: 1 / -1;
     }
 
-    .status {
-      display: inline-block;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      text-transform: uppercase;
-      font-size: 11px;
-      margin-bottom: 12px;
+    .guild-name {
+      color: var(--gold);
+      font-size: 18px;
     }
 
     .profile-image {
       display: block;
       max-width: 100%;
       max-height: 420px;
-      margin-top: 10px;
+      margin: 12px auto 0;
       border-radius: 8px;
       border: 1px solid var(--border);
+      object-fit: contain;
     }
 
-    .actions {
-      margin-top: 18px;
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
       border-top: 1px solid var(--border);
-      padding-top: 12px;
+      margin-top: 20px;
+      padding-top: 14px;
     }
 
-    .muted { font-size: 13px; }
+    .modal-actions button {
+      flex: 1;
+      min-width: 130px;
+      margin: 0;
+    }
 
     footer {
       text-align: center;
@@ -204,10 +337,43 @@
       font-size: 12px;
       padding: 20px;
     }
+
+    @media (max-width: 480px) {
+      .container {
+        width: calc(100% - 16px);
+        padding-top: 16px;
+      }
+
+      .panel,
+      .modal-content {
+        padding: 15px;
+      }
+
+      .application {
+        padding: 14px;
+      }
+
+      .app-summary {
+        min-width: 100%;
+      }
+
+      .modal-content {
+        max-height: 94vh;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-full {
+        grid-column: auto;
+      }
+    }
   </style>
 </head>
 
 <body>
+
 <main class="container">
 
   <header>
@@ -216,45 +382,84 @@
     <p>RECRUITMENT ADMINISTRATION</p>
   </header>
 
+  <!-- ADMIN LOGIN -->
+
   <section id="loginPanel" class="panel login">
     <h2>Admin Login</h2>
-    <p class="muted">Sign in with your authorized Royal Blood admin account.</p>
+
+    <p class="muted">
+      Sign in with your authorized Royal Blood admin account.
+    </p>
 
     <form id="loginForm">
+
       <label for="email">Admin Email</label>
-      <input id="email" type="email" autocomplete="username"
-             required placeholder="Enter your admin email">
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        required
+        placeholder="Enter your admin email"
+      >
 
       <label for="password">Password</label>
-      <input id="password" type="password"
-             autocomplete="current-password" required
-             placeholder="Enter your password">
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+        placeholder="Enter your password"
+      >
 
-      <button class="primary" id="loginButton" type="submit"
-              style="width:100%;margin-top:18px">
+      <button
+        class="primary"
+        id="loginButton"
+        type="submit"
+        style="width:100%;margin-top:18px"
+      >
         SIGN IN
       </button>
+
     </form>
 
-    <div id="loginNotice" class="notice hidden" role="alert"></div>
+    <div
+      id="loginNotice"
+      class="notice hidden"
+      role="alert"
+    ></div>
   </section>
 
+  <!-- ADMIN DASHBOARD -->
+
   <section id="dashboard" class="hidden">
+
     <div class="topbar">
       <div>
         <h2 style="margin-bottom:5px">Application Dashboard</h2>
         <div id="adminEmail" class="muted"></div>
       </div>
+
       <div>
-        <button id="refreshButton" class="secondary">REFRESH</button>
-        <button id="logoutButton" class="primary">LOG OUT</button>
+        <button id="refreshButton" class="secondary">
+          REFRESH
+        </button>
+
+        <button id="logoutButton" class="primary">
+          LOG OUT
+        </button>
       </div>
     </div>
 
-    <div id="dashboardNotice" class="notice hidden" role="alert"></div>
+    <div
+      id="dashboardNotice"
+      class="notice hidden"
+      role="alert"
+    ></div>
 
     <div class="panel">
+
       <label for="statusFilter">Filter Applications</label>
+
       <select id="statusFilter">
         <option value="all">All Applications</option>
         <option value="pending">Pending</option>
@@ -262,26 +467,77 @@
         <option value="rejected">Rejected</option>
       </select>
 
-      <div id="applicationCount" class="stats">Loading applications...</div>
+      <div id="applicationCount" class="stats">
+        Loading applications...
+      </div>
+
     </div>
 
+    <!-- Only compact application cards appear here -->
+
     <div id="applicationsList"></div>
+
   </section>
 
   <footer>
     ROYAL BLOOD ⚜️ BUILD YOUR NAME WITH ROYAL BLOOD
   </footer>
+
 </main>
 
+<!-- FULL APPLICATION POPUP -->
+
+<div
+  id="applicationModal"
+  class="modal hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
+>
+  <div class="modal-content">
+
+    <div class="modal-header">
+
+      <div>
+        <h2 id="modalTitle">Application Details</h2>
+        <div id="modalStatus" class="status">PENDING</div>
+      </div>
+
+      <button
+        type="button"
+        id="closeModalButton"
+        class="close-button"
+        aria-label="Close application"
+      >
+        &times;
+      </button>
+
+    </div>
+
+    <div id="modalNotice" class="notice hidden" role="alert"></div>
+
+    <div id="modalDetails" class="details"></div>
+
+    <div class="modal-actions" id="modalActions"></div>
+
+  </div>
+</div>
+
 <script type="module">
+
   import { createClient } from
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+  // IMPORTANT:
   // Use the same project URL and publishable key as index.html.
-  const SUPABASE_URL = "https://hawpgtlerdlbxhiappxy.supabase.co";
+  // Never put a service-role or secret key in this file.
+
+  const SUPABASE_URL =
+    "https://hawpgtlerdlbxhiappxy.supabase.co";
+
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_vAz2B0_INpPwM1GalC8YHA_wLyASGNl";
-;
+
   const supabase = createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
@@ -289,15 +545,37 @@
 
   const loginPanel = document.getElementById("loginPanel");
   const dashboard = document.getElementById("dashboard");
+
   const loginNotice = document.getElementById("loginNotice");
   const dashboardNotice = document.getElementById("dashboardNotice");
-  const applicationsList = document.getElementById("applicationsList");
+
+  const applicationsList =
+    document.getElementById("applicationsList");
+
+  const applicationModal =
+    document.getElementById("applicationModal");
+
+  const modalDetails =
+    document.getElementById("modalDetails");
+
+  const modalActions =
+    document.getElementById("modalActions");
+
+  const modalNotice =
+    document.getElementById("modalNotice");
 
   let allApplications = [];
+  let selectedApplicationId = null;
+  let previousFocusedElement = null;
+
+  // ------------------------------
+  // GENERAL HELPERS
+  // ------------------------------
 
   function showMessage(element, message, success = false) {
     element.textContent = message;
-    element.className = "notice" + (success ? " success" : "");
+    element.className =
+      "notice" + (success ? " success" : "");
   }
 
   function clearMessage(element) {
@@ -305,73 +583,87 @@
     element.className = "notice hidden";
   }
 
-  function addDetail(parent, label, value) {
+  function addDetail(parent, label, value, extraClass = "") {
     const box = document.createElement("div");
+
     box.className = "detail";
+
+    if (extraClass) {
+      box.classList.add(extraClass);
+    }
 
     const title = document.createElement("strong");
     title.textContent = label;
 
     const content = document.createElement("div");
+
     content.textContent =
-      value === null || value === undefined || value === ""
+      value === null ||
+      value === undefined ||
+      value === ""
         ? "Not provided"
         : String(value);
 
     box.append(title, content);
     parent.appendChild(box);
+
     return box;
   }
 
   function addButton(parent, text, className, handler) {
     const button = document.createElement("button");
+
     button.type = "button";
     button.className = className;
     button.textContent = text;
+
     button.addEventListener("click", handler);
+
     parent.appendChild(button);
+
     return button;
   }
 
-  async function showProfileImage(container, path) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "detail";
+  function formatDate(value) {
+    if (!value) return "Unknown";
 
-    const title = document.createElement("strong");
-    title.textContent = "FREE FIRE PROFILE SCREENSHOT";
-    wrapper.appendChild(title);
+    const date = new Date(value);
 
-    const image = document.createElement("img");
-    image.className = "profile-image";
-    image.alt = "Applicant's Free Fire profile screenshot";
-    image.loading = "lazy";
+    return Number.isNaN(date.getTime())
+      ? "Unknown"
+      : date.toLocaleString();
+  }
 
-    wrapper.appendChild(image);
-    container.appendChild(wrapper);
+  function normalizedStatus(status) {
+    return String(status || "pending").toLowerCase();
+  }
 
-    const { data, error } = await supabase
-      .storage
-      .from("profile-screenshots")
-      .createSignedUrl(path, 300);
+  function getStatusClass(status) {
+    const normalized = normalizedStatus(status);
 
-    if (error) {
-      image.remove();
-      const message = document.createElement("p");
-      message.className = "muted";
-      message.textContent =
-        "Screenshot unavailable. Check the admin Storage permissions.";
-      wrapper.appendChild(message);
-      return;
+    if (normalized === "approved") {
+      return "status-approved";
     }
 
-    image.src = data.signedUrl;
+    if (normalized === "rejected") {
+      return "status-rejected";
+    }
+
+    return "status-pending";
   }
+
+  // ------------------------------
+  // LOAD APPLICATIONS
+  // ------------------------------
 
   async function loadApplications() {
     clearMessage(dashboardNotice);
+
     applicationsList.replaceChildren();
 
-    const count = document.getElementById("applicationCount");
+    const count =
+      document.getElementById("applicationCount");
+
     count.textContent = "Loading applications...";
 
     const { data, error } = await supabase
@@ -383,112 +675,393 @@
 
     if (error) {
       count.textContent = "";
+
       showMessage(
         dashboardNotice,
         "Could not load applications. Check your admin account, table permissions and RLS policies."
       );
-      console.error(error);
+
+      console.error("Load applications error:", error);
+
       return;
     }
 
     allApplications = data || [];
+
     renderApplications();
   }
+
+  // ------------------------------
+  // RENDER COMPACT APPLICATION CARDS
+  // ------------------------------
 
   function renderApplications() {
     applicationsList.replaceChildren();
 
-    const filter = document.getElementById("statusFilter").value;
+    const filter =
+      document.getElementById("statusFilter").value;
 
-    const filtered = allApplications.filter(app =>
-      filter === "all" || app.status === filter
-    );
+    const filtered = allApplications.filter(app => {
+      const status = normalizedStatus(app.status);
+
+      return filter === "all" || status === filter;
+    });
 
     document.getElementById("applicationCount").textContent =
       `Total: ${allApplications.length} | Showing: ${filtered.length}`;
 
     if (!filtered.length) {
       const empty = document.createElement("div");
+
       empty.className = "panel";
-      empty.textContent = "No applications found for this filter.";
+      empty.textContent =
+        "No applications found for this filter.";
+
       applicationsList.appendChild(empty);
+
       return;
     }
 
     for (const app of filtered) {
+
       const card = document.createElement("article");
+
       card.className = "application";
 
-      const heading = document.createElement("h2");
-      heading.textContent = app.current_free_fire_name || "Unnamed Applicant";
-      card.appendChild(heading);
+      const summary = document.createElement("div");
+
+      summary.className = "app-summary";
+
+      const name = document.createElement("div");
+
+      name.className = "app-name";
+
+      name.textContent =
+        app.current_free_fire_name || "Unnamed Applicant";
 
       const status = document.createElement("span");
-      status.className = "status";
-      status.textContent = app.status || "pending";
-      card.appendChild(status);
 
-      const details = document.createElement("div");
-      details.className = "details";
+      status.className =
+        "status " + getStatusClass(app.status);
 
-      addDetail(details, "FREE FIRE UID", app.free_fire_uid);
-      addDetail(details, "GENDER", app.gender);
-      addDetail(details, "FREE FIRE LEVEL", app.free_fire_level);
-      addDetail(details, "DESIRED NAME", app.desired_name);
-      addDetail(details, "WHATSAPP", app.whatsapp_number);
-      addDetail(details, "SUBMITTED", app.created_at
-        ? new Date(app.created_at).toLocaleString()
-        : "Unknown");
+      status.textContent =
+        normalizedStatus(app.status).toUpperCase();
 
-      const guild = addDetail(
-        details,
-        "GENERATED ROYAL BLOOD NAME",
-        app.generated_guild_name
-      );
-      guild.classList.add("guild-name");
+      const meta = document.createElement("div");
 
-      addDetail(details, "REASON FOR JOINING", app.application_reason);
+      meta.className = "app-meta";
 
-      card.appendChild(details);
+      meta.textContent =
+        `UID: ${app.free_fire_uid || "Not provided"}\n` +
+        `Submitted: ${formatDate(app.created_at)}`;
+
+      meta.style.whiteSpace = "pre-line";
+
+      summary.append(name, status, meta);
+
+      const viewButton = document.createElement("button");
+
+      viewButton.type = "button";
+      viewButton.className = "primary";
+      viewButton.textContent = "VIEW APPLICATION";
+
+      viewButton.addEventListener("click", () => {
+        openApplication(app.id);
+      });
+
+      card.append(summary, viewButton);
+
       applicationsList.appendChild(card);
-
-      if (app.profile_screenshot_path) {
-        showProfileImage(card, app.profile_screenshot_path);
-      }
-
-      const actions = document.createElement("div");
-      actions.className = "actions";
-
-      if (app.status !== "approved") {
-        addButton(actions, "APPROVE", "approve", () =>
-          updateStatus(app.id, "approved")
-        );
-      }
-
-      if (app.status !== "rejected") {
-        addButton(actions, "REJECT", "reject", () =>
-          updateStatus(app.id, "rejected")
-        );
-      }
-
-      if (app.status !== "pending") {
-        addButton(actions, "RESET TO PENDING", "secondary", () =>
-          updateStatus(app.id, "pending")
-        );
-      }
-
-      card.appendChild(actions);
     }
   }
 
+  // ------------------------------
+  // OPEN FULL APPLICATION POPUP
+  // ------------------------------
+
+  async function openApplication(id) {
+
+    const app = allApplications.find(
+      item => String(item.id) === String(id)
+    );
+
+    if (!app) {
+      showMessage(
+        dashboardNotice,
+        "Application not found. Refresh the dashboard and try again."
+      );
+
+      return;
+    }
+
+    selectedApplicationId = app.id;
+    previousFocusedElement = document.activeElement;
+
+    clearMessage(modalNotice);
+
+    modalDetails.replaceChildren();
+    modalActions.replaceChildren();
+
+    document.getElementById("modalTitle").textContent =
+      app.current_free_fire_name || "Unnamed Applicant";
+
+    const modalStatus =
+      document.getElementById("modalStatus");
+
+    modalStatus.textContent =
+      normalizedStatus(app.status).toUpperCase();
+
+    modalStatus.className =
+      "status " + getStatusClass(app.status);
+
+    // Full applicant information
+
+    addDetail(
+      modalDetails,
+      "CURRENT FREE FIRE NAME",
+      app.current_free_fire_name
+    );
+
+    addDetail(
+      modalDetails,
+      "FREE FIRE UID",
+      app.free_fire_uid
+    );
+
+    addDetail(
+      modalDetails,
+      "GENDER",
+      app.gender
+    );
+
+    addDetail(
+      modalDetails,
+      "FREE FIRE LEVEL",
+      app.free_fire_level
+    );
+
+    addDetail(
+      modalDetails,
+      "DESIRED NAME",
+      app.desired_name
+    );
+
+    addDetail(
+      modalDetails,
+      "GENERATED ROYAL BLOOD NAME",
+      app.generated_guild_name,
+      "guild-name"
+    );
+
+    addDetail(
+      modalDetails,
+      "WHATSAPP NUMBER",
+      app.whatsapp_number
+    );
+
+    addDetail(
+      modalDetails,
+      "APPLICATION STATUS",
+      normalizedStatus(app.status).toUpperCase()
+    );
+
+    addDetail(
+      modalDetails,
+      "SUBMISSION DATE",
+      formatDate(app.created_at)
+    );
+
+    addDetail(
+      modalDetails,
+      "REASON FOR JOINING ROYAL BLOOD",
+      app.application_reason,
+      "detail-full"
+    );
+
+    // Screenshot placeholder
+
+    const screenshotBox = document.createElement("div");
+
+    screenshotBox.className = "detail detail-full";
+
+    const screenshotTitle = document.createElement("strong");
+
+    screenshotTitle.textContent =
+      "FREE FIRE PROFILE SCREENSHOT";
+
+    const screenshotMessage = document.createElement("p");
+
+    screenshotMessage.className = "muted";
+    screenshotMessage.textContent = app.profile_screenshot_path
+      ? "Loading screenshot..."
+      : "No screenshot was attached to this application.";
+
+    screenshotBox.append(
+      screenshotTitle,
+      screenshotMessage
+    );
+
+    modalDetails.appendChild(screenshotBox);
+
+    // Show status action buttons
+
+    if (normalizedStatus(app.status) !== "approved") {
+      addButton(
+        modalActions,
+        "APPROVE APPLICATION",
+        "approve",
+        () => updateStatus(app.id, "approved")
+      );
+    }
+
+    if (normalizedStatus(app.status) !== "rejected") {
+      addButton(
+        modalActions,
+        "REJECT APPLICATION",
+        "reject",
+        () => updateStatus(app.id, "rejected")
+      );
+    }
+
+    if (normalizedStatus(app.status) !== "pending") {
+      addButton(
+        modalActions,
+        "RESET TO PENDING",
+        "secondary",
+        () => updateStatus(app.id, "pending")
+      );
+    }
+
+    addButton(
+      modalActions,
+      "CLOSE",
+      "secondary",
+      closeApplication
+    );
+
+    // Open the popup before loading the screenshot
+
+    applicationModal.classList.remove("hidden");
+
+    document.body.classList.add("modal-open");
+
+    document.getElementById("closeModalButton").focus();
+
+    if (!app.profile_screenshot_path) {
+      return;
+    }
+
+    // Use a short-lived signed URL for the private screenshot
+
+    const { data, error } = await supabase
+      .storage
+      .from("profile-screenshots")
+      .createSignedUrl(app.profile_screenshot_path, 300);
+
+    // Ignore a late response if another application was opened
+
+    if (
+      String(selectedApplicationId) !== String(app.id) ||
+      applicationModal.classList.contains("hidden")
+    ) {
+      return;
+    }
+
+    if (error || !data?.signedUrl) {
+      screenshotMessage.textContent =
+        "Screenshot unavailable. Check the Storage bucket, object path and admin SELECT policy.";
+
+      console.error("Screenshot error:", error);
+
+      return;
+    }
+
+    const image = document.createElement("img");
+
+    image.className = "profile-image";
+
+    image.alt =
+      "Free Fire profile screenshot for " +
+      (app.current_free_fire_name || "applicant");
+
+    image.loading = "lazy";
+
+    image.onerror = () => {
+      image.remove();
+
+      screenshotMessage.textContent =
+        "The screenshot could not be displayed.";
+    };
+
+    image.src = data.signedUrl;
+
+    screenshotMessage.textContent = "";
+
+    screenshotBox.appendChild(image);
+  }
+
+  // ------------------------------
+  // CLOSE APPLICATION POPUP
+  // ------------------------------
+
+  function closeApplication() {
+    applicationModal.classList.add("hidden");
+
+    document.body.classList.remove("modal-open");
+
+    selectedApplicationId = null;
+
+    modalDetails.replaceChildren();
+    modalActions.replaceChildren();
+
+    if (previousFocusedElement?.isConnected) {
+      previousFocusedElement.focus();
+    }
+  }
+
+  document.getElementById("closeModalButton")
+    .addEventListener("click", closeApplication);
+
+  // Close by tapping the dark area outside the popup
+
+  applicationModal.addEventListener("click", event => {
+    if (event.target === applicationModal) {
+      closeApplication();
+    }
+  });
+
+  // Close with the Escape key
+
+  document.addEventListener("keydown", event => {
+    if (
+      event.key === "Escape" &&
+      !applicationModal.classList.contains("hidden")
+    ) {
+      closeApplication();
+    }
+  });
+
+  // ------------------------------
+  // APPROVE / REJECT / RESET
+  // ------------------------------
+
   async function updateStatus(id, status) {
+
     const confirmed = confirm(
       `Change this application's status to ${status.toUpperCase()}?`
     );
 
     if (!confirmed) return;
 
+    clearMessage(modalNotice);
     clearMessage(dashboardNotice);
+
+    const buttons =
+      modalActions.querySelectorAll("button");
+
+    buttons.forEach(button => {
+      button.disabled = true;
+    });
 
     const { data, error } = await supabase
       .from("applications")
@@ -498,20 +1071,35 @@
 
     if (error) {
       showMessage(
-        dashboardNotice,
+        modalNotice,
         "Status update failed. Check admin UPDATE permissions and RLS policies."
       );
-      console.error(error);
+
+      console.error("Status update error:", error);
+
+      buttons.forEach(button => {
+        button.disabled = false;
+      });
+
       return;
     }
 
     if (!data || data.length === 0) {
       showMessage(
-        dashboardNotice,
+        modalNotice,
         "No application was updated. Your account may not have admin permission."
       );
+
+      buttons.forEach(button => {
+        button.disabled = false;
+      });
+
       return;
     }
+
+    // Reload data so the card and status remain synchronized
+
+    await loadApplications();
 
     showMessage(
       dashboardNotice,
@@ -519,15 +1107,23 @@
       true
     );
 
-    await loadApplications();
+    closeApplication();
   }
 
+  // ------------------------------
+  // ADMIN AUTHORIZATION
+  // ------------------------------
+
   async function enterDashboard(user) {
-    // The database function verifies the signed-in user's admin status.
-    const { data, error } = await supabase.rpc("is_royal_blood_admin");
+
+    const { data, error } = await supabase.rpc(
+      "is_royal_blood_admin"
+    );
 
     if (error || data !== true) {
+
       await supabase.auth.signOut();
+
       loginPanel.classList.remove("hidden");
       dashboard.classList.add("hidden");
 
@@ -535,10 +1131,14 @@
         loginNotice,
         "Access denied. This account is not registered as a Royal Blood administrator."
       );
+
+      console.error("Admin authorization error:", error);
+
       return;
     }
 
     clearMessage(loginNotice);
+
     loginPanel.classList.add("hidden");
     dashboard.classList.remove("hidden");
 
@@ -548,59 +1148,115 @@
     await loadApplications();
   }
 
-  document.getElementById("loginForm").addEventListener("submit", async event => {
-    event.preventDefault();
-    clearMessage(loginNotice);
+  // ------------------------------
+  // LOGIN
+  // ------------------------------
 
-    const loginButton = document.getElementById("loginButton");
-    loginButton.disabled = true;
-    loginButton.textContent = "SIGNING IN...";
+  document.getElementById("loginForm")
+    .addEventListener("submit", async event => {
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value
-      });
+      event.preventDefault();
 
-      if (error) throw error;
+      clearMessage(loginNotice);
 
-      await enterDashboard(data.user);
-    } catch (error) {
-      console.error(error);
-      showMessage(
-        loginNotice,
-        "Login failed. Check your email and password, then try again."
-      );
-    } finally {
-      loginButton.disabled = false;
-      loginButton.textContent = "SIGN IN";
-    }
-  });
+      const loginButton =
+        document.getElementById("loginButton");
 
-  document.getElementById("refreshButton").addEventListener(
-    "click", loadApplications
-  );
+      loginButton.disabled = true;
+      loginButton.textContent = "SIGNING IN...";
 
-  document.getElementById("statusFilter").addEventListener(
-    "change", renderApplications
-  );
+      try {
 
-  document.getElementById("logoutButton").addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    allApplications = [];
-    applicationsList.replaceChildren();
-    dashboard.classList.add("hidden");
-    loginPanel.classList.remove("hidden");
-    document.getElementById("password").value = "";
-    clearMessage(loginNotice);
-  });
+        const { data, error } =
+          await supabase.auth.signInWithPassword({
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value
+          });
 
-  // Restore a previous session only after checking admin authorization.
-  const { data: sessionData } = await supabase.auth.getSession();
+        if (error) throw error;
 
-  if (sessionData.session) {
+        await enterDashboard(data.user);
+
+      } catch (error) {
+
+        console.error("Login error:", error);
+
+        showMessage(
+          loginNotice,
+          "Login failed. Check your email and password, then try again."
+        );
+
+      } finally {
+
+        loginButton.disabled = false;
+        loginButton.textContent = "SIGN IN";
+
+      }
+
+    });
+
+  // ------------------------------
+  // REFRESH AND FILTERS
+  // ------------------------------
+
+  document.getElementById("refreshButton")
+    .addEventListener("click", loadApplications);
+
+  document.getElementById("statusFilter")
+    .addEventListener("change", renderApplications);
+
+  // ------------------------------
+  // LOG OUT
+  // ------------------------------
+
+  document.getElementById("logoutButton")
+    .addEventListener("click", async () => {
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        showMessage(
+          dashboardNotice,
+          "Logout failed. Please try again."
+        );
+
+        console.error("Logout error:", error);
+
+        return;
+      }
+
+      allApplications = [];
+
+      applicationsList.replaceChildren();
+
+      closeApplication();
+
+      dashboard.classList.add("hidden");
+      loginPanel.classList.remove("hidden");
+
+      document.getElementById("password").value = "";
+
+      clearMessage(loginNotice);
+      clearMessage(dashboardNotice);
+
+    });
+
+  // ------------------------------
+  // RESTORE EXISTING SESSION
+  // ------------------------------
+
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error("Session restore error:", sessionError);
+  }
+
+  if (sessionData?.session) {
     await enterDashboard(sessionData.session.user);
   }
+
 </script>
+
 </body>
-        </html>
+</html>
