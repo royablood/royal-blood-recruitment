@@ -485,6 +485,7 @@
         opacity: 0;
         transform: translateY(10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -496,6 +497,7 @@
         opacity: 0;
         transform: translateY(-10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -661,6 +663,7 @@
             required
             placeholder="Example: Spencer"
           >
+
           <small class="help">
             Letters and numbers only will be used to create your guild name.
           </small>
@@ -675,6 +678,7 @@
             accept="image/jpeg,image/png,image/webp"
             required
           >
+
           <small class="help">
             Upload a clear screenshot of your in-game profile.
             Accepted formats: JPG, PNG and WEBP. Maximum size: 5 MB.
@@ -692,6 +696,7 @@
             required
             placeholder="Include your country code, e.g. +234..."
           >
+
           <small class="help">
             We will use this number to contact you about your application.
           </small>
@@ -770,7 +775,7 @@
     import { createClient } from
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    // Existing Supabase project configuration.
+    // Supabase project configuration.
     const SUPABASE_URL =
       "https://hawpgtlerdlbxhiappxy.supabase.co";
 
@@ -855,7 +860,9 @@
       });
 
     function makeUuid() {
-      if (crypto.randomUUID) {
+      if (
+        typeof crypto.randomUUID === "function"
+      ) {
         return crypto.randomUUID();
       }
 
@@ -929,6 +936,8 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "SUBMITTING APPLICATION...";
 
+      let uploadedPath = null;
+
       try {
         const extensionMap = {
           "image/jpeg": "jpg",
@@ -939,9 +948,13 @@
         const folderId = makeUuid();
         const extension = extensionMap[file.type];
 
-        const uploadedPath =
+        uploadedPath =
           `${folderId}/profile.${extension}`;
 
+        /*
+         * STEP 1: Upload the screenshot.
+         * Keep the bucket private. Do not create a public URL.
+         */
         const { error: uploadError } = await supabase
           .storage
           .from("profile-screenshots")
@@ -951,13 +964,20 @@
           });
 
         if (uploadError) {
-  throw new Error(
-    "SCREENSHOT UPLOAD FAILED: " + uploadError.message
-  );
-}
+          throw new Error(
+            "SCREENSHOT UPLOAD FAILED: " +
+            uploadError.message
+          );
+        }
 
-console.log("Screenshot uploaded successfully:", uploadedPath);
+        console.log(
+          "Screenshot uploaded successfully:",
+          uploadedPath
+        );
 
+        /*
+         * STEP 2: Submit the application through the existing RPC.
+         */
         const { data, error } = await supabase.rpc(
           "submit_royal_blood_application",
           {
@@ -985,16 +1005,20 @@ console.log("Screenshot uploaded successfully:", uploadedPath);
         );
 
         if (error) {
-          throw error;
+          throw new Error(
+            "DATABASE SUBMISSION FAILED: " +
+            error.message +
+            (error.code ? " (Code: " + error.code + ")" : "")
+          );
         }
 
         const result = Array.isArray(data) ? data[0] : data;
 
         if (!result || !result.generated_name) {
           throw new Error(
-            "The application was submitted, but the generated name " +
-            "was not returned. Contact the guild administrator " +
-            "before submitting again."
+            "The submission function did not return the expected " +
+            "generated guild name. Check the application in the " +
+            "admin panel before attempting to submit again."
           );
         }
 
@@ -1015,46 +1039,24 @@ console.log("Screenshot uploaded successfully:", uploadedPath);
           error
         );
 
+        /*
+         * TEMPORARY DIAGNOSTIC:
+         * Display the real error so we can identify the failing step.
+         */
         let message =
-          "We could not submit your application. " +
-          "Please check your connection and try again.";
+          error?.message ||
+          "An unknown error occurred.";
 
         if (
-          error.message &&
-          error.message.includes("row-level security")
+          error?.code &&
+          !message.includes("Code:")
         ) {
-          message =
-            "Screenshot upload was blocked by the storage permissions. " +
-            "Please contact the guild administrator.";
-
-        } else if (
-          error.message &&
-          error.message.includes("Invalid")
-        ) {
-          message = error.message;
-
-        } else if (
-          error.message &&
-          error.message.includes("Please check")
-        ) {
-          message = error.message;
-
-        } else if (
-          error.message &&
-          error.message.includes("valid desired name")
-        ) {
-          message = error.message;
-
-        } else if (
-          error.message &&
-          error.message.includes("Failed to fetch")
-        ) {
-          message =
-            "Could not connect to Supabase. Please check the Project URL, " +
-            "Publishable Key and internet connection.";
+          message += " (Code: " + error.code + ")";
         }
 
-        showNotice(message);
+        showNotice(
+          "Submission failed: " + message
+        );
 
       } finally {
         submitBtn.disabled = false;
